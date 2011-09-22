@@ -1,24 +1,46 @@
 <?php
 
-class HW_Walker extends Walker_Nav_Menu {
+class Hero_Walker extends Walker_Nav_Menu {
     
     function start_el( &$output, $item, $depth, $args ) {
+        $post = get_post($item->object_id);
+        $output .= '<div class="hero-unit">';
+        $output .= '<h1>' . $item->title . '</h1>';
+        $output .= apply_filters('the_excerpt', $post->post_excerpt);
+        $output .= "<a class=\"btn primary\" href=\"{$item->url}\">More &raquo;</a>";
     }
     
     function end_el( &$output, $item, $depth ) {
+        $output .= "</div>";
+    }
+}
+
+class Sidekick_Walker extends Walker_Nav_Menu {
+    function start_el( &$output, $item, $depth, $args ) {
+        $post = get_post($item->object_id);
+        $output .= '<div class="span5">';
+        $output .= '<h2>' . $item->title . '</h2>';
+        $output .= apply_filters('the_excerpt', $post->post_excerpt);
+        $output .= "<a class=\"btn\" href=\"{$item->url}\">More &raquo;</a>";
+    }
+    
+    function end_el( &$output, $item, $depth ) {
+        $output .= "</div>";
     }
 }
 
 class HW_Nav_Menus {
     
     function __construct() {
-        add_action( 'after_setup_theme', array(&$this, 'ensure_menus') );
+        add_action( 'init', array(&$this, 'ensure_menus') );
     }
     
     function ensure_menus() {
         // in case we want to create more later
         $menus = array(
-            'main' => 'Main Navigation',
+            'topbar' => 'Top Bar',
+            'hero' => 'Hero',
+            'sidekicks' => 'Sidekicks',
         );
         register_nav_menus($menus);
 
