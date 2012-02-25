@@ -20,7 +20,11 @@ class Sidekick_Walker extends Walker_Nav_Menu {
         $post = get_post($item->object_id);
         $output .= '<div class="span5">';
         $output .= '<h2>' . $item->title . '</h2>';
-        $output .= apply_filters('the_excerpt', $post->post_excerpt);
+        if ($post) {
+            $output .= apply_filters('the_excerpt', $post->post_excerpt);
+        } else {
+            $output .= apply_filters('the_excerpt', category_description($item->object_id));
+        }
         $output .= "<a class=\"btn\" href=\"{$item->url}\">More &raquo;</a>";
     }
     
